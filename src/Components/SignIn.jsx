@@ -19,7 +19,7 @@ const SignIn = () => {
                 lastSignInTime:result.user?.metadata?.lastSignInTime
             }
             //update last sign in to db
-            fetch('http://localhost:3000/users',{
+            fetch('https://coffee-store-server-gamma-dun.vercel.app/users',{
                 method:'PATCH',
                 headers:{
                     'content-type':'application/json'
