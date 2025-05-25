@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { UNSAFE_FetchersContext, useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
 
 const Users = () => {
     const initialUsers = useLoaderData()
     const [users, setUsers] = useState(initialUsers)
+
+    // useEffect(() => {
+    //     fetch('/')
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             console.log(data)
+    //         })
+    // }, []);
+
+    // useEffect(() => {
+    //     axios.get('/')
+    //         .then(data => {
+    //             console.log(data.data)
+    //         })
+    // }, [])
+
     const handleDelete = (id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -16,7 +33,7 @@ const Users = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://coffee-store-server-gamma-dun.vercel.app/users/${id}`, {
+                fetch(`http://localhost:3000/users/${id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())
