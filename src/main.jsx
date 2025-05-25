@@ -16,52 +16,67 @@ import SignUp from './Components/SignUp.jsx';
 import AuthProvider from './Context/AuthProvider.jsx';
 import Users from './Components/Users.jsx';
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import Users2 from './Components/Users2.jsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
-    Component:MainLayout,
-    children:[
+    Component: MainLayout,
+    children: [
       {
-        index:true,
-        Component:Home,
-        loader:()=>fetch('https://coffee-store-server-gamma-dun.vercel.app/coffees')
+        index: true,
+        Component: Home,
+        loader: () => fetch('http://localhost:3000/coffees')
       },
       {
-        path:'addCoffee',
-        Component:AddCoffee
+        path: 'addCoffee',
+        Component: AddCoffee
       },
       {
-        path:'coffee/:id',
-        Component:CoffeeDetails
+        path: 'coffee/:id',
+        Component: CoffeeDetails
 
       },
       {
-        path:'updateCoffee/:id',
-        loader:({params})=>fetch(`https://coffee-store-server-gamma-dun.vercel.app/coffees/${params.id}`),
-        Component:UpdateCoffee
+        path: 'updateCoffee/:id',
+        loader: ({ params }) => fetch(`http://localhost:3000/coffees/${params.id}`),
+        Component: UpdateCoffee
       },
       {
-        path:'signin',
-        Component:SignIn
+        path: 'signin',
+        Component: SignIn
       },
       {
-        path:'signup',
-        Component:SignUp
-       },
-       {
-        path:'users',
-        Component:Users,
-        loader:()=>fetch('https://coffee-store-server-gamma-dun.vercel.app/users')
-       }
+        path: 'signup',
+        Component: SignUp
+      },
+      {
+        path: 'users',
+        Component: Users,
+        loader: () => fetch('http://localhost:3000/users')
+      },
+      {
+        path: 'users2',
+        Component: Users2,
+      }
     ]
   },
 ]);
 
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-         <RouterProvider router={router} />
+       <QueryClientProvider client={queryClient}>
+       <AuthProvider>
+      <RouterProvider router={router} />
     </AuthProvider>
-     
+    </QueryClientProvider>
+   
+
   </StrictMode>,
 )

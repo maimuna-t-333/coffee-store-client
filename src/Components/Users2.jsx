@@ -1,26 +1,31 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { UNSAFE_FetchersContext, useLoaderData } from 'react-router';
-import Swal from 'sweetalert2';
+import {useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+// import { data } from "react-router";
+import Swal from "sweetalert2";
 
-const Users = () => {
-    const initialUsers = useLoaderData()
-    const [users, setUsers] = useState(initialUsers)
 
-    // useEffect(() => {
-    //     fetch('/')
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             console.log(data)
-    //         })
-    // }, []);
+const Users2 = () => {
 
-    // useEffect(() => {
-    //     axios.get('/')
-    //         .then(data => {
-    //             console.log(data.data)
-    //         })
-    // }, [])
+    const {isPending,isError,error data:users}=useQuery({
+        queryKey:['users'],
+        queryFn:async()=>{
+            const res=await fetch('http://localhost:3000/users');
+            return res.json()
+        }
+
+    })
+    console.log(users)
+
+    // const [users,setUsers]=useState([])
+
+    // useEffect(()=>{
+    //     fetch('http://localhost:3000/users')
+    //     .then(res=>res.json())
+    //     .then(data=>{
+    //         setUsers(data)
+    //     })
+
+    // },[])
 
     const handleDelete = (id) => {
         Swal.fire({
@@ -58,9 +63,17 @@ const Users = () => {
             }
         });
     }
+
+    if(isPending){
+        return <span className="loading loading-spinner loading-xl"></span>
+    }
+    if(isError){
+        return <p>{error.message}</p>
+    }
+
     return (
         <div>
-            <h2 className='text-3xl'>Users: {users.length}</h2>
+            {/* <h2 className='text-3xl'>Users: {users.length}</h2> */}
             <div className="overflow-x-auto">
                 <table className="table">
                     {/* head */}
@@ -79,7 +92,7 @@ const Users = () => {
                         {/* row 1 */}
 
                         {
-                            users.map((user, index) => <tr key={user._id}>
+                            users?.map((user, index) => <tr key={user._id}>
                                 <th>
                                     {index + 1}
                                 </th>
@@ -111,4 +124,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Users2;
